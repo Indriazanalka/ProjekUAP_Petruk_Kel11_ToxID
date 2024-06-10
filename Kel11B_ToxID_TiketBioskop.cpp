@@ -152,3 +152,39 @@ public:
         }
     }
 };
+
+int main() {
+    SistemPemesananTiket sistem;
+
+    Bioskop bioskop1("Bioskop XXI", 5, 5);
+    bioskop1.tambahFilm("Film Agak Lain,", "10:00", 50000);
+    bioskop1.tambahFilm("Film Dilan 1990,", "13:00", 60000);
+    sistem.tambahBioskop(bioskop1);
+
+    cout << "Selamat Datang di ToxID" << endl << endl;
+
+    int pilihan;
+    do {
+        cout << "1. Registrasi\n2. Login\n3. Pesan Tiket\n4. Keluar\nPilihan: ";
+        cin >> pilihan;
+        if (pilihan == 1) {
+            string namaPengguna, kataSandi;
+            cout << "Masukkan nama pengguna: ";
+            cin >> namaPengguna;
+            cout << "Masukkan kata sandi: ";
+            cin >> kataSandi;
+            sistem.registrasiPengguna(namaPengguna, kataSandi);
+        } else if (pilihan == 2) {
+            string namaPengguna, kataSandi;
+            cout << "Masukkan nama pengguna: ";
+            cin >> namaPengguna;
+            cout << "Masukkan kata sandi: ";
+            cin >> kataSandi;
+            sistem.loginPengguna(namaPengguna, kataSandi);
+        } else if (pilihan == 3) {
+            sistem.pesanTiket();
+        }
+    } while (pilihan != 4);
+
+    return 0;
+}
