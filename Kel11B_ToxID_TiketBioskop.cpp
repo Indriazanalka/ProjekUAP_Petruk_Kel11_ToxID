@@ -11,19 +11,18 @@ public:
     string namaPengguna;
     string kataSandi;
 
-    Pengguna() {}  
+    Pengguna() {} 
     Pengguna(string nama, string sandi) : namaPengguna(nama), kataSandi(sandi) {}
 };
-
 
 class Film {
 public:
     string judul;
     string waktu;
+    double harga;
 
-    Film(string j, string w) : judul(j), waktu(w) {}
+    Film(string j, string w, double h) : judul(j), waktu(w), harga(h) {}
 };
-
 
 class Bioskop {
 public:
@@ -33,13 +32,13 @@ public:
 
     Bioskop(string n, int baris, int kolom) : nama(n), kursi(baris, vector<char>(kolom, 'O')) {}
 
-    void tambahFilm(string judul, string waktu) {
-        filmList.push_back(Film(judul, waktu));
+    void tambahFilm(string judul, string waktu, double harga) {
+        filmList.push_back(Film(judul, waktu, harga));
     }
 
     void tampilkanFilm() {
         for (size_t i = 0; i < filmList.size(); ++i) {
-            cout << i + 1 << ". " << filmList[i].judul << " pada " << filmList[i].waktu << endl;
+            cout << i + 1 << ". " << filmList[i].judul << " pada " << filmList[i].waktu << " - Harga: " << fixed << setprecision(2) << filmList[i].harga << " IDR" << endl;
         }
     }
 
@@ -66,4 +65,3 @@ private:
     unordered_map<string, Pengguna> pengguna;
     vector<Bioskop> bioskopList;
     Pengguna* penggunaLogin = nullptr;
-
