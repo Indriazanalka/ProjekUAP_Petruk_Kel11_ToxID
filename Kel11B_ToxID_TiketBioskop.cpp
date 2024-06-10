@@ -65,3 +65,90 @@ private:
     unordered_map<string, Pengguna> pengguna;
     vector<Bioskop> bioskopList;
     Pengguna* penggunaLogin = nullptr;
+public:
+    void registrasiPengguna(string namaPengguna, string kataSandi) {
+        if (pengguna.find(namaPengguna) != pengguna.end()) {
+            cout << "Nama pengguna sudah ada. Silahkan coba yang lain." << endl;
+        } else {
+            pengguna[namaPengguna] = Pengguna(namaPengguna, kataSandi);
+            cout << "Pengguna terdaftar dengan sukses." << endl;
+        }
+    }
+
+    bool loginPengguna(string namaPengguna, string kataSandi) {
+        if (pengguna.find(namaPengguna) != pengguna.end() && pengguna[namaPengguna].kataSandi == kataSandi) {
+            penggunaLogin = &pengguna[namaPengguna];
+            cout << "Login berhasil." << endl;
+            return true;
+        } else {
+            cout << "Nama pengguna atau kata sandi salah." << endl;
+            return false;
+        }
+    }
+
+    void tambahBioskop(Bioskop bioskop) {
+        bioskopList.push_back(bioskop);
+    }
+
+    void tampilkanBioskop() {
+        for (size_t i = 0; i < bioskopList.size(); ++i) {
+            cout << i + 1 << ". " << bioskopList[i].nama << endl;
+        }
+    }
+
+    void konfirmasiPembayaran(string judulFilm, string waktuFilm, string namaBioskop, int baris, int kolom, double harga) {
+        char konfirmasi;
+        cout << "Detail Pemesanan:" << endl;
+        cout << "Film: " << judulFilm << endl;
+        cout << "Waktu: " << waktuFilm << endl;
+        cout << "Bioskop: " << namaBioskop << endl;
+        cout << "Kursi: Baris " << baris + 1 << ", Kolom " << kolom + 1 << endl;
+        cout << "Harga: " << fixed << setprecision(2) << harga << " IDR" << endl;
+        cout << "Apakah Anda ingin melanjutkan ke pembayaran? (y/n): ";
+        cin >> konfirmasi;
+
+        if (konfirmasi == 'y' || konfirmasi == 'Y') {
+            cout << "Pembayaran berhasil. Tiket Anda telah dikonfirmasi." << endl;
+            cout << "Kode tiket Anda: [###BARCODE###]" << endl;
+        } else {
+            cout << "Pemesanan dibatalkan." << endl;
+        }
+    }
+
+    void pesanTiket() {
+        if (!penggunaLogin) {
+            cout << "Silakan login untuk memesan tiket." << endl;
+            return;
+        }
+
+        tampilkanBioskop();
+        int pilihanBioskop;
+        cout << "Pilih Bioskop: ";
+        cin >> pilihanBioskop;
+        if (pilihanBioskop < 1 || pilihanBioskop > bioskopList.size()) {
+            cout << "Pilihan tidak valid." << endl;
+            return;
+        }
+        Bioskop &bioskop = bioskopList[pilihanBioskop - 1];
+
+        bioskop.tampilkanFilm();
+        int pilihanFilm;
+        cout << "Pilih Film: ";
+        cin >> pilihanFilm;
+        if (pilihanFilm < 1 || pilihanFilm > bioskop.filmList.size()) {
+            cout << "Pilihan tidak valid." << endl;
+            return;
+        }
+        Film &film = bioskop.filmList[pilihanFilm - 1];
+
+        bioskop.tampilkanKursi();
+        int baris, kolom;
+        cout << "Pilih Kursi (baris kolom): ";
+        cin >> baris >> kolom;
+        if (bioskop.pesanKursi(baris - 1, kolom - 1)) {
+            konfirmasiPembayaran(film.judul, film.waktu, bioskop.nama, baris - 1, kolom - 1, film.harga);
+        } else {
+            cout << "Gagal memesan kursi. Mungkin sudah dipesan atau nomor kursi tidak valid." << endl;
+        }
+    }
+};
